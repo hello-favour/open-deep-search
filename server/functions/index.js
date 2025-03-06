@@ -7,11 +7,10 @@ const app = express();
 
 
 app.use(cors({ origin: true }));
-app.use(express.json());
 
 app.use('/', Middleware);
 
-app.get("/deep-search", deepSearchRoutes);
+app.use("/deep-search", deepSearchRoutes);
 
 exports.v1 = onRequest({
     concurrency: 1,

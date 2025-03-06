@@ -3,13 +3,14 @@ const { finalConfigs } = require("../Configurations");
 
 async function searchWebAPI({
     query,
-    searchType = "web",
+    searchType,
     filter = 1,
     rights = "cc_publicdomain",
     safe = "active",
     maxResults = 10,
     apiProvider = "google",
 }) {
+
     try {
         const {
             GOOGLE_CUSTOM_SEARCH_ENGINE_ID,
@@ -23,7 +24,10 @@ async function searchWebAPI({
             throw new Error("Google API credentials are missing.");
         }
 
+        console.log(GOOGLE_CUSTOM_SEARCH_ENGINE_ID, GOOGLE_CUSTOM_SEARCH_KEY, "searchWebAPI");
+
         const encodedQuery = encodeURIComponent(query);
+
 
         let url;
         if (apiProvider === "google") {
@@ -39,14 +43,11 @@ async function searchWebAPI({
             throw new Error(`Unsupported API provider: ${apiProvider}`);
         }
 
-        console.log("Search URL:", url);
-
         const response = await axios.get(url);
 
         if (response.data && response.data.items) {
             return response.data.items;
         } else {
-            console.warn("No items found in response:", response.data);
             return [];
         }
     } catch (error) {

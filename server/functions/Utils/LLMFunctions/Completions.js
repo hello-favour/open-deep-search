@@ -4,66 +4,67 @@ const { finalConfigs } = require('../Configurations');
 
 
 async function getLLMChatCompletionResponse({
-    messages,   // Required: Array of message objects
-    model = "gpt-3.5-turbo",    // Default model
-    provider = "openai",    // Default provider
-    temperature = 1,
-    top_p = 1,
-    top_k = 0,
-    frequency_penalty = 0,
-    presence_penalty = 0,
-    repetition_penalty = 1,
-    n = 1,
-    beam_size = 1,
-    max_tokens = 300,
-    stream = false,
-    tools = [],
-    tool_choice = "auto",
-    tools_model = "claude-3-5-sonnet",
-    integrity = 12,
-    integrity_model = "gpt-3.5-turbo",
-    force_provider = false,
-    memory = false,
-    mem_session = "",
-    mem_expire = 60,
-    mem_clear = 1,
-    mem_msgs = 10,
-    mem_length = 20,
-    rag_tune = "",
-    routing = "perf",
+    messages,   
+    model = "gpt-4o-mini",   
+    provider = "openai",
+    temperature,
+    top_p,
+    top_k ,
+    frequency_penalty,
+    presence_penalty,
+    repetition_penalty,
+    n,
+    beam_size ,
+    max_tokens = 8000,
+    stream ,
+    tools,
+    tool_choice,
+    tools_model,
+    integrity ,
+    integrity_model,
+    force_provider,
+    memory,
+    mem_session,
+    mem_expire,
+    mem_clear,
+    mem_msgs,
+    mem_length,
+    rag_tune,
+    routing,
 }) {
     try {
-        const { PIE_API_KEY } = finalConfigs(); 
+        const { PIE_API_KEY } = finalConfigs();
 
-        const data = {
-            messages,
-            model,
-            provider,
-            temperature,
-            top_p,
-            top_k,
-            frequency_penalty,
-            presence_penalty,
-            repetition_penalty,
-            n,
-            beam_size,
-            max_tokens,
-            stream,
-            tools,
-            tool_choice,
-            tools_model,
-            integrity,
-            integrity_model,
-            force_provider,
-            memory,
-            mem_session,
-            mem_expire,
-            mem_clear,
-            mem_msgs,
-            mem_length,
-            rag_tune,
-            routing,
-        };
+        const data = {};
+
+        if(messages) data.messages = messages;
+        if(model) data.model = model;
+        if(provider) data.provider = provider;
+        if(temperature) data.temperature = temperature;
+        if(top_p) data.top_p = top_p;
+        if(top_k) data.top_k = top_k;
+        if(frequency_penalty) data.frequency_penalty = frequency_penalty;
+        if(presence_penalty) data.presence_penalty = presence_penalty;
+        if(repetition_penalty) data.repetition_penalty = repetition_penalty;
+        if(n) data.n = n;
+        if(beam_size) data.beam_size = beam_size;
+        if(max_tokens) data.max_tokens = max_tokens;
+        if(stream) data.stream = stream;
+        if(tools) data.tools = tools;
+        if(tool_choice) data.tool_choice = tool_choice;
+        if(tools_model) data.tools_model = tools_model;
+        if(integrity) data.integrity = integrity;
+        if(integrity_model) data.integrity_model = integrity_model;     
+        if(force_provider) data.force_provider = force_provider;
+        if(memory) data.memory = memory;    
+        if(mem_session) data.mem_session = mem_session;
+        if(mem_expire) data.mem_expire = mem_expire;
+        if(mem_clear) data.mem_clear = mem_clear;
+        if(mem_msgs) data.mem_msgs = mem_msgs;
+        if(mem_length) data.mem_length = mem_length;
+        if(rag_tune) data.rag_tune = rag_tune;
+        if(routing) data.routing = routing;
+
 
         Object.keys(data).forEach(key => data[key] === undefined && delete data[key]);
 

@@ -18,7 +18,6 @@ deepSearchRoutes.post("/query", async (req, res) => {
 
 
     const analyzeQuerySystemPrompt = analyzeQuerySystemPrompts();
-    const finalStructuredOutputSystemPrompt = finalStructuredOutputSystemPrompts();
 
     try {
         // Step 1: Analyze the query to determine intent
@@ -27,21 +26,24 @@ deepSearchRoutes.post("/query", async (req, res) => {
                 { role: "system", content: analyzeQuerySystemPrompt },
                 { role: "user", content: query }
             ],
-            model: "gpt-4o",
-            provider: "openai"
         });
 
+
         const analyzedData = JSON.parse(analyzedQueryResponse.choices[0].message.content);
+
 
         // Step 2: Process based on intent
         let finalResponse;
 
-        if (analyzedData.intent === "normal" || analyzedData.intent === "think") {
-            // Directly generate response for "normal" or "think" intents
+        if (analyzedData.intent === "normal") {
+
             finalResponse = await getLLMChatCompletionResponse({
                 messages: [
-                    { role: "system", content: finalStructuredOutputSystemPrompt },
-                    { role: "user", content: JSON.stringify(analyzedData) }
+                    { role: "system", content: finalStructuredOutputSystemPrompts({
+                        KNOWLEDGE_CENTER: '',
+                        THOUGHT_PROCESS: analyzedData.thoughtProcess,
+                    }) },
+                    { role: "user", content: query }
                 ],
                 model: "gpt-4o",
                 provider: "openai"
@@ -49,31 +51,39 @@ deepSearchRoutes.post("/query", async (req, res) => {
         } else if (analyzedData.intent === "deep_search") {
             // Perform a web search for "deep_search" intent
             const searchResults = await searchWebAPI({
-                query: analyzedData.distiledQuery,
-                searchType: "web",
-                maxResults: 3,
+                query: analyzedData?.distiledQuery ?? query,
+                maxResults: 5,
             });
 
 
             // Step 3: Scrape content from search result URLs using Cheerio
             const scrapedContents = await Promise.all(
                 searchResults.map(async (result) => {
-                    const url = result.link; // Google Custom Search returns "link" field
+                    const url = result.link;
+                    const snippet = result.snippet;
+
                     const content = await scrapeWebPage(url);
-                    return { url, content };
+
+
+                    return { sourceUrl: url, content: content ?? snippet };
                 })
             );
 
-            // Combine scraped content into a single string for the LLM
             const searchResultsText = scrapedContents
                 .map(({ url, content }) => `Source: ${url}\n${content}`)
                 .join("\n\n");
 
+
             // Generate final response with search results
             finalResponse = await getLLMChatCompletionResponse({
                 messages: [
-                    { role: "system", content: finalStructuredOutputSystemPrompt },
-                    { role: "user", content: JSON.stringify({ ...analyzedData, searchResults: searchResultsText }) }
+                    {
+                        role: "system", content: finalStructuredOutputSystemPrompts({
+                            KNOWLEDGE_CENTER: searchResultsText,
+                            THOUGHT_PROCESS: analyzedData.thoughtProcess,
+                        })
+                    },
+                    { role: "user", content: query }
                 ],
                 model: "gpt-4o",
                 provider: "openai"
@@ -82,9 +92,7 @@ deepSearchRoutes.post("/query", async (req, res) => {
             throw new Error("Invalid intent received from query analysis");
         }
 
-        // Parse and send the final structured response
-        const finalData = JSON.parse(finalResponse.choices[0].message.content);
-        return res.status(200).send(finalData);
+        return res.status(200).send(finalResponse.choices[0].message.content);
     } catch (error) {
         console.error(`Error processing query ${requestID} for user ${user}:`, error);
 

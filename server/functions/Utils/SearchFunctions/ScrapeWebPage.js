@@ -18,10 +18,10 @@ async function scrapeWebPage(url) {
             .join("\n")
             .slice(0, 2000); // Limit to 2000 characters to avoid overwhelming LLM
 
-        return content || "";
+        return content;
     } catch (error) {
         console.error(`Failed to scrape ${url}:`, error.message);
-        return "Scraping failed";
+        return null;
     }
 }
 

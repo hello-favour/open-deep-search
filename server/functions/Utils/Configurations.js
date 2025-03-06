@@ -1,3 +1,4 @@
+const admin = require("firebase-admin");
 const { defineString } = require("firebase-functions/params");
 const { onInit } = require("firebase-functions/v2/core");
 
@@ -9,4 +10,5 @@ const finalConfigs = {
 
 onInit(async () => {
     finalConfigs.PIE_API_KEY = API_PIE_KEY.value();
+    admin.initializeApp();
 });

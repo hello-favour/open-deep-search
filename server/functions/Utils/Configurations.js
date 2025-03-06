@@ -12,3 +12,8 @@ onInit(async () => {
     finalConfigs.PIE_API_KEY = API_PIE_KEY.value();
     admin.initializeApp();
 });
+
+
+module.exports = {
+    finalConfigs: () => finalConfigs,
+};

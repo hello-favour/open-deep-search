@@ -11,7 +11,7 @@ const Middleware = async (req, res, next) => {
         };
 
         if (authorization) {
-            const apiKey = req.headers.authorization.split("Bearer ")[1];
+            const apiKey = `${authorization}`.split("Bearer ")[1];
 
             if (!apiKey) {
                 return res

@@ -27,7 +27,7 @@ deepSearchRoutes.post("/query", async (req, res) => {
                 { role: "system", content: analyzeQuerySystemPrompt },
                 { role: "user", content: query }
             ],
-            model: "gpt-4o-mini",
+            model: "gpt-4o",
             provider: "openai"
         });
 

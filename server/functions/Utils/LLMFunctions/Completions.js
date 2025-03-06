@@ -65,16 +65,17 @@ async function getLLMChatCompletionResponse({
             routing,
         };
 
+        Object.keys(data).forEach(key => data[key] === undefined && delete data[key]);
+
         const config = {
             method: "post",
-            maxBodyLength: Infinity,
             url: "https://apipie.ai/v1/chat/completions",
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "application/json",
                 "Authorization": `Bearer ${PIE_API_KEY}`,
             },
-            data: JSON.stringify(JSON.parse(data)),
+            data: JSON.stringify(data),
         };
 
         const response = await axios.request(config);

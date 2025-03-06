@@ -35,7 +35,7 @@ deepSearchRoutes.post('/query', async (req, res) => {
         maxResults: 5,
       });
 
-      // Step 3: Scrape content from search result URLs using Puppeteer
+      // Step 3: Scrape content from search result URLs
       const scrapedContents = await Promise.all(
         searchResults.map(async (result) => {
           const url = result.link;

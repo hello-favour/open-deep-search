@@ -9,8 +9,6 @@ const deepSearchRoutes = express.Router();
 deepSearchRoutes.post("/query", async (req, res) => {
     const { query, user, requestID } = req.body;
 
-    console.log(`Processing query ${requestID} for user ${user}: ${query}`);
-
     // Input validation
     if (!query || !user) {
         return res.status(400).send({ error: "Missing required fields" });

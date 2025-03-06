@@ -1,30 +1,27 @@
-
-const axios = require("axios");
-const cheerio = require("cheerio");
-
+const puppeteer = require('puppeteer');
 
 async function scrapeWebPage(url) {
-    try {
-        const response = await axios.get(url, {
-            headers: { "User-Agent": "Mozilla/5.0" },
-            timeout: 10000,
-        });
-        const $ = cheerio.load(response.data);
+  try {
+    const browser = await puppeteer.launch({ headless: true });
+    const page = await browser.newPage();
+    await page.goto(url, { waitUntil: 'networkidle2', timeout: 10000 });
 
-        // Extract meaningful content (customize based on your needs)
-        const content = $("p, h1, h2, h3")
-            .map((i, el) => $(el).text().trim())
-            .get()
-            .join("\n")
-            .slice(0, 2000); // Limit to 2000 characters to avoid overwhelming LLM
+    const content = await page.evaluate(() => {
+      const elements = document.querySelectorAll('p, h1, h2, h3');
+      return Array.from(elements)
+        .map((el) => el.innerText.trim())
+        .join('\n');
+    });
 
-        return content;
-    } catch (error) {
-        console.error(`Failed to scrape ${url}:`, error.message);
-        return null;
-    }
+    await browser.close();
+
+    return content.slice(0, 2000); // Limit to 2000 characters
+  } catch (error) {
+    console.error(`Failed to scrape ${url}:`, error.message);
+    return null;
+  }
 }
 
 module.exports = {
-    scrapeWebPage,
-}
+  scrapeWebPage,
+};

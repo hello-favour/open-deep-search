@@ -2,7 +2,8 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
 
-export async function scrapeWebPage(url) {
+
+async function scrapeWebPage(url) {
     try {
         const response = await axios.get(url, {
             headers: { "User-Agent": "Mozilla/5.0" },
@@ -22,4 +23,8 @@ export async function scrapeWebPage(url) {
         console.error(`Failed to scrape ${url}:`, error.message);
         return "Scraping failed";
     }
+}
+
+module.exports = {
+    scrapeWebPage,
 }

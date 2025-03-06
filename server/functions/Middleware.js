@@ -1,8 +1,7 @@
-import { COLLECTION_AUTHORIZATIONS } from "./Utils/Constants/Collections";
-
 const admin = require("firebase-admin");
+const { COLLECTION_AUTHORIZATIONS } = require("./Utils/Constants/Collections");
 
-export const Middleware = async (req, res, next) => {
+const Middleware = async (req, res, next) => {
     try {
         const apiKey = req.headers.authorization.split("Bearer ")[1];
 
@@ -13,6 +12,7 @@ export const Middleware = async (req, res, next) => {
         }
 
         const authorizationDocument = await admin.firestore().collection(COLLECTION_AUTHORIZATIONS).doc(apiKey).get();
+        const userId = authorizationDocument.data().userId;
 
         let currentUser = await admin.auth().getUser(userId);
 
@@ -37,3 +37,8 @@ export const Middleware = async (req, res, next) => {
     }
     return next();
 };
+
+
+module.exports = {
+    Middleware,
+}

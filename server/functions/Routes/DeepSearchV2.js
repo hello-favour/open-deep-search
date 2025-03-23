@@ -1,4 +1,3 @@
-require('dotenv').config();
 const express = require('express');
 const { analyzeQuerySystemPrompt, searchStrategySystemPrompt, synthesisSystemPrompt } = require('../Utils/Constants/Prompts');
 const { getLLMChatCompletionResponse } = require('../Utils/LLMFunctions/Completions');

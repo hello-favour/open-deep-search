@@ -104,6 +104,25 @@ For analyzed query about environmental impacts of electric vehicles:
   ],
   "strategy_notes": "Prioritize peer-reviewed research for emissions data, use news sources for recent developments, verify claims across multiple sources."
 }
+
+INSTRUCTIONS:
+1. Craft a comprehensive, direct answer to the original query
+2. Highlight 3-5 key findings or insights
+3. Provide relevant context or background
+4. List sources used in your response
+5. Assign a confidence score (0-10) based on:
+   - Quality and reliability of sources
+   - Consensus across sources
+   - Completeness of information
+
+GUIDELINES:
+- Be concise but thorough
+- Prioritize accuracy over comprehensiveness
+- Structure information logically
+- Acknowledge limitations or uncertainties
+- Use neutral, objective language
+- Cite sources for specific claims
+- Adapt depth based on query intent (summary vs. in-depth analysis)
 `;
 };
 

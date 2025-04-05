@@ -6,7 +6,11 @@
  * System prompt for query analysis
  * Determines query intent, scope, and extracts key terms
  */
-const analyzeQuerySystemPrompt = `
+const analyzeQuerySystemPrompt = () => {
+  const today = new Date();
+  const formattedDate = today.toISOString().split('T')[0];
+
+  return `
 You are an AI assistant tasked with analyzing user queries for search processing.
 
 OUTPUT FORMAT (JSON):
@@ -17,6 +21,8 @@ OUTPUT FORMAT (JSON):
   "distilled_query": "simplified search-optimized version",
   "thought_process": "brief reasoning behind this analysis"
 }
+
+Today's date: ${formattedDate}
 
 INSTRUCTIONS:
 1. Extract 3-5 most important search terms
@@ -43,12 +49,17 @@ For "What are the environmental impacts of electric vehicles compared to gas car
   "thought_process": "Query requires comparing multiple factors across different vehicle types. Needs comprehensive analysis of environmental effects."
 }
 `;
+};
 
 /**
  * System prompt for search strategy formulation
  * Determines optimal sources and reasoning steps
  */
-const searchStrategySystemPrompt = `
+const searchStrategySystemPrompt = () => {
+  const today = new Date();
+  const formattedDate = today.toISOString().split('T')[0];
+
+  return `
 You are an AI assistant tasked with creating optimal search strategies.
 
 OUTPUT FORMAT (JSON):
@@ -59,6 +70,8 @@ OUTPUT FORMAT (JSON):
   "reasoning_steps": ["step1", "step2"],
   "strategy_notes": "brief explanation"
 }
+  
+Today's date: ${formattedDate}
 
 INSTRUCTIONS:
 1. Determine best source types:
@@ -91,7 +104,27 @@ For analyzed query about environmental impacts of electric vehicles:
   ],
   "strategy_notes": "Prioritize peer-reviewed research for emissions data, use news sources for recent developments, verify claims across multiple sources."
 }
+
+INSTRUCTIONS:
+1. Craft a comprehensive, direct answer to the original query
+2. Highlight 3-5 key findings or insights
+3. Provide relevant context or background
+4. List sources used in your response
+5. Assign a confidence score (0-10) based on:
+   - Quality and reliability of sources
+   - Consensus across sources
+   - Completeness of information
+
+GUIDELINES:
+- Be concise but thorough
+- Prioritize accuracy over comprehensiveness
+- Structure information logically
+- Acknowledge limitations or uncertainties
+- Use neutral, objective language
+- Cite sources for specific claims
+- Adapt depth based on query intent (summary vs. in-depth analysis)
 `;
+};
 
 /**
  * System prompt for web search refinement
@@ -101,7 +134,12 @@ For analyzed query about environmental impacts of electric vehicles:
  * @param {string} options.STRATEGY - Search strategy
  * @returns {string} Formatted system prompt
  */
-const webSearchRefinementPrompt = ({ KNOWLEDGE_CENTER, STRATEGY }) => `
+const webSearchRefinementPrompt = ({ KNOWLEDGE_CENTER, STRATEGY }) => {
+
+  const today = new Date();
+  const formattedDate = today.toISOString().split('T')[0];
+
+  return `
 You are an AI assistant evaluating search results for relevance and completeness.
 
 COLLECTED DATA:
@@ -128,6 +166,8 @@ OUTPUT FORMAT (JSON):
   "reasoning": "evaluation process explanation"
 }
 
+Today's date: ${formattedDate}
+
 INSTRUCTIONS:
 1. Evaluate each source for:
    - Relevance to the query (0-10)
@@ -144,12 +184,17 @@ INSTRUCTIONS:
 
 Focus on quality over quantity. One excellent source is better than several mediocre ones.
 `;
+};
 
 /**
  * System prompt for synthesizing results
  * Creates final response from evaluated data
  */
-const synthesisSystemPrompt = `
+const synthesisSystemPrompt = () => {
+  const today = new Date();
+  const formattedDate = today.toISOString().split('T')[0];
+
+  return `
 You are an AI assistant synthesizing search results into a coherent response.
 
 OUTPUT FORMAT (JSON):
@@ -158,8 +203,11 @@ OUTPUT FORMAT (JSON):
   "key_findings": ["finding1", "finding2"],
   "context": "background information",
   "sources": ["url1", "url2"],
-  "confidence_score": number (0-10)
+  "confidence_score": number (0-10),
+  "current_date": "YYYY-MM-DD",
 }
+
+Today's date: ${formattedDate}
 
 INSTRUCTIONS:
 1. Craft a comprehensive, direct answer to the original query
@@ -180,6 +228,7 @@ GUIDELINES:
 - Cite sources for specific claims
 - Adapt depth based on query intent (summary vs. in-depth analysis)
 `;
+};
 
 module.exports = {
   analyzeQuerySystemPrompt,

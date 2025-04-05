@@ -19,12 +19,17 @@ deepSearchRoutesV2.post('/query', async (req, res) => {
         // Step 1: Query Parsing
         const analyzedData = await parseQuery(query);
 
+        console.log('Analyzed Data:', analyzedData);
+
         // Step 2: Search Strategy
         const strategyData = await formSearchStrategy(analyzedData);
+
+        console.log('Search Strategy Data:', strategyData);
 
         // Step 3: Data Collection
         const collectedData = await collectData(strategyData, analyzedData.distilled_query);
 
+        console.log('Collected Data:', collectedData);
 
         if (!collectedData.length) {
             throw new Error('Failed to collect sufficient data');
@@ -32,6 +37,12 @@ deepSearchRoutesV2.post('/query', async (req, res) => {
 
         // Step 4: Data Evaluation
         const evaluatedData = await evaluateData(collectedData, strategyData);
+
+        console.log('Evaluated Data:', evaluatedData);
+
+        if (!evaluatedData) {
+            throw new Error('Failed to evaluate data');
+        }
 
         // // Step 5: Synthesis
         const finalResponse = await synthesizeResults(evaluatedData);

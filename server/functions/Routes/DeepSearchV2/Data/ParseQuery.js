@@ -11,7 +11,7 @@ async function parseQuery(query) {
 
     const analyzedQueryResponse = await getLLMChatCompletionResponse({
         messages: [
-            { role: 'system', content: analyzeQuerySystemPrompt },
+            { role: 'system', content: analyzeQuerySystemPrompt() },
             { role: 'user', content: query },
         ],
     });

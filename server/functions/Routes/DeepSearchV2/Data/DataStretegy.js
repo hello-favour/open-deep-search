@@ -9,7 +9,7 @@ const { getLLMChatCompletionResponse } = require("../../../Utils/LLMFunctions/Co
 async function formSearchStrategy(analyzedData) {
     const searchStrategyResponse = await getLLMChatCompletionResponse({
         messages: [
-            { role: 'system', content: searchStrategySystemPrompt },
+            { role: 'system', content: searchStrategySystemPrompt() },
             { role: 'user', content: JSON.stringify(analyzedData) },
         ],
     });

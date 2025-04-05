@@ -10,7 +10,7 @@ async function synthesizeResults(evaluatedData) {
     try {
         const synthesisResponse = await getLLMChatCompletionResponse({
             messages: [
-                { role: 'system', content: synthesisSystemPrompt },
+                { role: 'system', content: synthesisSystemPrompt() },
                 { role: 'user', content: JSON.stringify(evaluatedData) },
             ],
         });

@@ -1,8 +1,8 @@
 const express = require('express');
-const { getLLMChatCompletionResponse } = require('../Utils/LLMFunctions/Completions');
-const { searchWebAPI } = require('../Utils/SearchFunctions/SearchWeb');
-const { analyzeQuerySystemPrompts, finalStructuredOutputSystemPrompts } = require('../Utils/Constants/Prompts');
-const { scrapeWebPage } = require('../Utils/SearchFunctions/ScrapeWebPage');
+const { getLLMChatCompletionResponse } = require('../../Utils/LLMFunctions/Completions');
+const { searchWebAPI } = require('../../Utils/SearchFunctions/SearchWeb');
+const {  finalStructuredOutputSystemPrompts, analyzeQuerySystemPrompt } = require('../../Utils/Constants/Prompts');
+const { scrapeWebPage } = require('../../Utils/SearchFunctions/ScrapeWebPage');
 
 const deepSearchRoutes = express.Router();
 
@@ -13,8 +13,6 @@ deepSearchRoutes.post('/query', async (req, res) => {
   if (!query || !user) {
     return res.status(400).send({ error: 'Missing required fields' });
   }
-
-  const analyzeQuerySystemPrompt = analyzeQuerySystemPrompts();
 
   try {
     // Step 1: Analyze the query to determine intent

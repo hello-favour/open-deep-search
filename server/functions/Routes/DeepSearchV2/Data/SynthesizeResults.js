@@ -1,3 +1,4 @@
+const { synthesisSystemPrompt } = require("../../../Utils/Constants/Prompts");
 const { getLLMChatCompletionResponse } = require("../../../Utils/LLMFunctions/Completions");
 
 /**

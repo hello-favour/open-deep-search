@@ -18,7 +18,7 @@ deepSearchRoutes.post('/query', async (req, res) => {
     // Step 1: Analyze the query to determine intent
     const analyzedQueryResponse = await getLLMChatCompletionResponse({
       messages: [
-        { role: 'system', content: analyzeQuerySystemPrompt },
+        { role: 'system', content: analyzeQuerySystemPrompt() },
         { role: 'user', content: query },
       ],
     });
